@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Fillinformation</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>一路上有你</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+      <li><a href="/{{Emailaddress}}/main">热门景点</a></li>
+      <li><a href="/{{Emailaddress}}/recommend">个性推荐</a></li>
+      <li><a href="/{{Emailaddress}}/foot">我的足迹</a></li>
+	  <li><a href="/{{Emailaddress}}/willgo">意向发布</a></li>
+      <li class="current_page_item"><a href="">完善个人信息</a></li>
+      <li><a href="/{{Emailaddress}}/security">安全中心</a></li>
+	  <li><a href="/{{Emailaddress}}/myteam">我的队伍</a></li>
+    </ul>
+
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+		{%if Submit%}
+		<font color="#FFFFFF" size="4"  face="微软雅黑">提交成功！</font>
+		{% endif %}
+      <div style="padding-bottom: 10px;"></div>
+      <div class="post">
+        <h1 class="title"><a href="#">完善您的信息:</a></h1>
+		<div class="entry">
+		<form action="" method="post" >
+		{% csrf_token %}
+			<p><h2>姓名：<input type="text" name="name" value={{ User.Name }}></h2></p>
+			{% if Man%}
+          <p><h2>性别：<input value="man" type="radio" checked="checked" name="1" />男<input value="woman" type="radio"  name="1"/>女</h2></p>
+		  {% else %}
+			<p><h2>性别：<input value="man" type="radio" name="1" />男<input value="woman" type="radio" checked="checked"  name="1"/>女</h2></p>
+		  {% endif %}
+		  <h2>年龄：<input type="text" name="age" value={{ User.Age }}></h2>
+		  <h2>Email：<input type="email" name="email" value={{ User.Email }}></h2>
+				<p><h2>性格：
+				{%if Tsilence %}
+				<input name="character" type="checkbox" checked="checked" value="silence" />安静
+				{%else%}
+				<input name="character" type="checkbox" value="silence" />安静
+				{%endif%}
+				
+				{%if Tactive%}
+				<input name="character" type="checkbox" checked="checked" value="active" />活泼
+				{%else%}
+				<input name="character" type="checkbox" value="active" />活泼
+				{%endif%}
+				
+				{%if Tchat%}
+				<input name="character" type="checkbox" checked="checked" value="chat" />健谈
+				{%else%}
+				<input name="character" type="checkbox" value="chat" />健谈
+				{%endif%}
+				
+				{%if Tmisspast%}
+				<input name="character" type="checkbox" checked="checked" value="misspast" />怀旧
+				{%else%}
+				<input name="character" type="checkbox" value="misspast" />怀旧
+				{%endif%}
+				</h2></p>
+				<h2>性格描述：
+				<textarea style="font-size:20px; width:380px; height:150px;" size="20px" name="discription">{{ User.Discription }}</textarea>
+				</h2>
+				
+				<p>&nbsp&nbsp&nbsp <input type="submit" value="提交！"></p>
+				</form>
+		  </p>
+        </div>
+      </div>
+<div>
+	
+	
+</div>
+
+    </div>
+    <!-- end content -->
+    <!-- start sidebars -->
+    <div id="sidebar1" class="sidebar">
+      <ul>
+        
+      </ul>
+    </div>
+	<div id="sidebar2" class="sidebar">
+      <ul>
+		<li>
+          <font color="#FFFFFF" size="3"  face="微软雅黑">您以{{Emailaddress}}登录</font>
+        </li>
+        
+      </ul>
+    </div>
+    <!-- end sidebars -->
+    <div style="clear: both;">&nbsp;</div>
+  </div>
+  <!-- end page -->
+</div>
+<div id="footer">
+  <div id="footer-content">
+    <p>&copy;2015 All Rights Reserved. &nbsp;&nbsp; Design by <a href="/aboutme" target="_blank">Three-Coders</a>.</p>
+  </div>
+</div>
+
+</body>
+</html>

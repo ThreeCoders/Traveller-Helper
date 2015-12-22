@@ -1,0 +1,39 @@
+<html>
+<body bgcolor="f3f9f1">
+<head>
+<style type="text/css">
+h1 {letter-spacing: 10px}
+h1 {text-decoration: underline}
+h1 {color:#725e82}
+h1 {font-family:"SimHei"}
+h1 {text-indent: 5cm}
+h1.thick {font-weight: bold}
+h4 {color:#bacac6}
+h4 {text-indent: 5cm}
+h1.small {line-height: 5%}
+</style>
+</head>
+
+<br />
+<h1 class="small", class="thick">景点日志</h1>
+<h4>Comment of Views</h4>
+
+<head>
+<style type="text/css">
+h3 {text-indent: 5cm}
+h3 {font-family:"KaiTi"}
+h3 {color:#177cb0}
+</style>
+</head>
+
+<h3><span>地 点：{{Place}} </h3>
+<h3><span>评 论：{{Comment}}</h3>
+<h3><span>照 片：</h3>
+{%for i in Count%}
+<h3>&nbsp&nbsp&nbsp&nbsp&nbsp<span>
+<img src="/static/images/{{Emailaddress}}/{{Place}}/{{i}}.png" height="180px" width="280px"></img></h3>
+<br/>
+{%endfor%}
+
+</body>
+</html>

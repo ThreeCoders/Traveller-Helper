@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Myfoot</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default1.css" rel="stylesheet" type="text/css" media="screen" />
+<!--<script type="text/javascript"> 
+  var curIndex = 0; 
+  var timeInterval = 1000; 
+  var arr = new Array(); 
+  arr[0] = "/static/images/北京.jpg"; 
+  arr[1] = "/static/images/上海.jpg"; 
+  arr[2] = "/static/images/天津.jpg"; 
+  arr[3] = "/static/images/广州.jpg"; 
+  arr[4] = "/static/images/海口.jpg"; 
+  arr[5] = "/static/images/哈尔滨.jpg"; 
+  arr[6] = "/static/images/银川.jpg"; 
+  setInterval(changeImg,timeInterval); 
+  function changeImg() { 
+   var obj = document.getElementById("obj"); 
+   if (curIndex == arr.length-1) { 
+    curIndex = 0; 
+   } else { 
+    curIndex += 1;
+     } 
+   obj.src = arr[curIndex]; 
+  } 
+ </script>-->
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>一路上有你</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+      <li><a href="/{{Emailaddress}}/main">热门景点</a></li>
+      <li><a href="/{{Emailaddress}}/recommend">个性推荐</a></li>
+      <li class="current_page_item"><a href="">我的足迹</a></li>
+	  <li><a href="/{{Emailaddress}}/willgo">意向发布</a></li>
+      <li><a href="/{{Emailaddress}}/fillinformation">完善个人信息</a></li>
+      <li><a href="/{{Emailaddress}}/security">安全中心</a></li>
+		<li><a href="/{{Emailaddress}}/myteam">我的队伍</a></li>
+    </ul>
+
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+      {%if Submit%}
+	  <font color="#FFFFFF" size="4"  face="微软雅黑">提交成功！</font>
+	  {% endif %}
+	  {%if Fillinformation%}
+
+	<font color="#FFFFFF" size="4"  face="微软雅黑">请先去完善个人信息！</font>
+	
+	{%endif%}
+      <div style="padding-bottom: 10px;">
+	  
+	  <!--<img id = "obj" height="320px" width="500px" src = "1.jpg" border = 0 />-->
+	  </div>
+      <div class="post">
+        <h1 class="title"><a href="#">我的足迹</a></h1>
+      </div>
+      <div class="post">
+		{%for element in Placeview%}
+		<p align="center" style="font-size:150%; ">
+		<a href="/{{Emailaddress}}/{{element}}/commentview"  <strong> {{element}} </strong> </a> 
+		<a href="/{{Emailaddress}}/{{element}}/commentview" target＝_blank><img src="/static/images/{{Emailaddress}}/{{element}}/1.png" width="240" height="160"/>    </a>
+		</P>
+		{% endfor %}
+      </div>
+    </div>
+    <!-- end content -->
+    <!-- start sidebars -->
+    <div id="sidebar1" class="sidebar">
+      <ul>
+        <li>
+			&nbsp
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+			<font color="#FFFFFF" size="3"  face="微软雅黑">您以{{Emailaddress}}登录</font>
+			<br/>
+			<br/>
+			
+          <h2>添加评论:</h2>
+          <ul>
+            <form action="" method="post">
+			{% csrf_token %}
+			<nobr>旅游景点：</nobr><input type="text" style="font-size:20px; width:380px; height:30px;" name="place">
+			<br/>
+			<nobr> 旅游日志： </nobr>
+			<!--<link href="/static/css/css3.css" rel="stylesheet" type="text/css" media="screen" />-->
+			<div>     
+         <div>     
+           <textarea style="font-size:20px; width:380px; height:300px;" size="20px" name="comment"></textarea>  
+          
+         </div>     
+       </div>
+			<br/>
+			<br/>
+			 <input type="submit" value="提交并去添加照片" style="width:150px; height:40px;">
+			</form>
+          </ul>
+        </li>
+      </ul>
+    </div>
+	<div id="sidebar2" class="sidebar">
+      <ul>
+		<li>
+          
+        </li>
+        
+      </ul>
+    </div>
+    <!-- end sidebars -->
+    <div style="clear: both;">&nbsp;</div>
+  </div>
+  <!-- end page -->
+</div>
+<div id="footer">
+  <div id="footer-content">
+    <p>&copy;2015 All Rights Reserved. &nbsp;&nbsp; Design by <a href="/aboutme" target="_blank">Three-Coders</a>.</p>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<body>
+{%if Submit%}
+<p>上传成功{{Count}}张照片！可以继续添加照片</p>
+{%endif%}
+<p>{{place}}</p>
+<form action="" enctype="multipart/form-data" method="post">
+{% csrf_token %}
+<input type="file" name = "picfile">
+<br/><br/><br/>
+<input value="提交" type="submit">
+</form>
+<p><a href="/{{Emailaddress}}/foot">返回评论页</a></p>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Mainpage</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript"> 
+  var curIndex = 0; 
+  var timeInterval = 1000; 
+  var arr = new Array(); 
+  arr[0] = "/static/images/北京.jpg"; 
+  arr[1] = "/static/images/上海.jpg"; 
+  arr[2] = "/static/images/天津.jpg"; 
+  arr[3] = "/static/images/广州.jpg"; 
+  arr[4] = "/static/images/海口.jpg"; 
+  arr[5] = "/static/images/哈尔滨.jpg"; 
+  arr[6] = "/static/images/银川.jpg";
+  arr[7] = "/static/images/广州.jpg";
+  arr[8] = "/static/images/香港.jpg";
+  arr[9] = "/static/images/澳门.jpg";
+  arr[10] = "/static/images/杭州.jpg";
+  arr[11] = "/static/images/乌鲁木齐.jpg";
+  arr[12] = "/static/images/拉萨.jpg";
+  arr[13] = "/static/images/苏州.jpg";
+  setInterval(changeImg,timeInterval); 
+  function changeImg() { 
+   var obj = document.getElementById("obj"); 
+   if (curIndex == arr.length-1) { 
+    curIndex = 0; 
+   } else { 
+    curIndex += 1;
+     } 
+   obj.src = arr[curIndex]; 
+  } 
+ </script>
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>一路上有你</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+      <li class="current_page_item"><a href="">热门景点</a></li>
+      <li><a href="/{{Emailaddress}}/recommend">个性推荐</a></li>
+      <li><a href="/{{Emailaddress}}/foot">我的足迹</a></li>
+	  <li><a href="/{{Emailaddress}}/willgo">意向发布</a></li>
+      <li><a href="/{{Emailaddress}}/fillinformation">完善个人信息</a></li>
+      <li><a href="/{{Emailaddress}}/security">安全中心</a></li>
+      <li><a href="/{{Emailaddress}}/myteam">我的队伍</a></li>
+    </ul>
+
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+      <img id = "obj" height="320px" width="500px" src = "1.jpg" border = 0 />
+      <div class="post">
+        <h1 class="title"><a href="#">欢迎来到我们的站点!</a></h1>
+        <p class="byline"><small>Posted on November 1st, 2015<a href="#"></a></small></p>
+        <h2 class="title"><a href="/{{Emailaddress1}}/{{Place1}}/commentview">{{Place1}}</a></h2>
+		<div class="entry">
+		  <p><img src="/static/images/{{Emailaddress1}}/{{Place1}}/1.png" height="180px" width="280px"></img></p>
+          <p><strong>热门评论1：{{Comment1}}</strong> </p>
+          <p></p>
+          <p class="links"><a href="/{{Name1}}/information" class="more">By {{Name1}}</a> &nbsp;&nbsp;&nbsp;</p>
+        </div>
+      </div>
+      <div class="post">
+        <h2 class="title"><a href="/{{Emailaddress2}}/{{Place2}}/commentview">{{Place2}}</a></h2>
+        <p class="byline"></p>
+        <div class="entry">
+		<p><img src="/static/images/{{Emailaddress2}}/{{Place2}}/1.png" height="180px" width="280px"></img></p>
+          <p><strong>热门评论2：{{Comment2}}</strong> </p>
+          <p class="links"><a href="/{{Name2}}/information" class="more">By {{Name2}}</a> &nbsp;&nbsp;&nbsp;</p>
+        </div>
+      </div>
+      <div class="post">
+        <h2 class="title"><a href="/{{Emailaddress3}}/{{Place3}}/commentview">{{Place3}}</a></h2>
+        <p class="byline"></p>
+        <div class="entry">
+		<p><img src="/static/images/{{Emailaddress3}}/{{Place3}}/1.png" height="180px" width="280px"></img></p>
+          <p>热门评论3：{{Comment3}}</p>
+          <p class="links"><a href="/{{Name3}}/information" class="more">By {{Name3}}</a> &nbsp;&nbsp;&nbsp;</p>
+        </div>
+      </div>
+	  <p align="center" style="font-size:150%;">
+		<a href="/{{Emailaddress}}/newcomment" target＝_blank><img src="/static/images/img03.jpg" width="80" height="80"/>    更多旅游日志 >> </a>
+		</p>
+    </div>
+    <!-- end content -->
+    <!-- start sidebars -->
+    <div id="sidebar1" class="sidebar">
+		
+      <ul>
+	  {%for element in View1%}
+        <li>
+          <h2>{{element}}</h2>
+          <ul>
+            <a href="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D{{element}}" target＝_blank><img height="200px" width="170px" src="/static/images/{{element}}.jpg" alt="" /></a>
+          </ul>
+        </li>
+		{% endfor %}
+        
+      </ul>
+    </div>
+	<div id="sidebar2" class="sidebar">
+      <ul>
+		<li>
+          <font color="#FFFFFF" size="3"  face="微软雅黑">您以{{Emailaddress}}登录</font>
+        </li>
+		{%for element in View2%}
+        <li>
+          <h2>{{element}}</h2>
+          <ul>
+            <a href="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D{{element}}" target＝_blank><img height="200px" width="170px" src="/static/images/{{element}}.jpg" alt="" /></a>
+          </ul>
+        </li>
+    {% endfor %}
+      </ul>
+    </div>
+    <!-- end sidebars -->
+    <div style="clear: both;">&nbsp;</div>
+  </div>
+  <!-- end page -->
+</div>
+<div id="footer">
+  <div id="footer-content">
+    <p>&copy;2015 All Rights Reserved. &nbsp;&nbsp; Design by <a href="/aboutme" target="_blank">Three-Coders</a>.</p>
+  </div>
+</div>
+
+</body>
+</html>

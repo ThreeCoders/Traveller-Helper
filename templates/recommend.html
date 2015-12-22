@@ -1,0 +1,749 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Recommend</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default.css" rel="stylesheet" type="text/css" media="screen" />
+<script language="javascript">
+<!--
+
+//==================================================== 参数设定部分 =======================================================
+var bMoveable=true;		//设置日历是否可以拖动
+var _VersionInfo="Version:2.0"	//版本信息
+
+//==================================================== WEB 页面显示部分 =====================================================
+var strFrame;		//存放日历层的HTML代码
+document.writeln('<iframe bgcolor="#000000" id=knowskyDateLayer Author=wayx frameborder=0 style="position: absolute;  width: 186; height: 247; z-index: 9998; display: none"></iframe>');
+strFrame='<style>';
+strFrame+='INPUT.button{BORDER-RIGHT: #B3C9E1 1px solid;BORDER-TOP: #B3C9E1 1px solid;BORDER-LEFT: #B3C9E1 1px solid;';
+strFrame+='BORDER-BOTTOM: #ff9900 1px solid;BACKGROUND-COLOR: #EDF2F8;font-family:宋体;}';
+strFrame+='TD{FONT-SIZE: 9pt;font-family:宋体;}';
+strFrame+='</style>';
+strFrame+='<scr' + 'ipt>';
+strFrame+='var datelayerx,datelayery;	/*存放日历控件的鼠标位置*/';
+strFrame+='var bDrag;	/*标记是否开始拖动*/';
+strFrame+='function document.onmousemove()	/*在鼠标移动事件中，如果开始拖动日历，则移动日历*/';
+strFrame+='{if(bDrag && window.event.button==1)';
+strFrame+='	{var DateLayer=parent.document.all.knowskyDateLayer.style;';
+strFrame+='		DateLayer.posLeft += window.event.clientX-datelayerx;/*由于每次移动以后鼠标位置都恢复为初始的位置，因此写法与div中不同*/';
+strFrame+='		DateLayer.posTop += window.event.clientY-datelayery;}}';
+strFrame+='function DragStart()		/*开始日历拖动*/';
+strFrame+='{var DateLayer=parent.document.all.knowskyDateLayer.style;';
+strFrame+='	datelayerx=window.event.clientX;';
+strFrame+='	datelayery=window.event.clientY;';
+strFrame+='	bDrag=true;}';
+strFrame+='function DragEnd(){		/*结束日历拖动*/';
+strFrame+='	bDrag=false;}';
+strFrame+='</scr' + 'ipt>';
+strFrame+='<div style="z-index:9999;position: absolute; left:0; top:0;" onselectstart="return false"><span id=tmpSelectYearLayer Author=wayx style="z-index: 9999;position: absolute;top: 3; left: 19;display: none"></span>';
+strFrame+='<span id=tmpSelectMonthLayer Author=wayx style="z-index: 9999;position: absolute;top: 3; left: 78;display: none"></span>';
+strFrame+='<table style="FILTER:dropshadow(color=#EDEDF8,offx=3.3,offy=3.3,positive=1);" cellSpacing="0" cellPadding="0" width="100%" border="0"><tr><td>';
+// 控件边框颜色
+strFrame+='<table border=1 cellspacing=0 cellpadding=0 width=182 height=160 bgColor="#FFFFFF" borderColorLight=#7197CA borderColorDark="#ffffff"  Author="wayx">';
+strFrame+='  <tr Author="wayx"><td width=182 height=23 Author="wayx" bgcolor=#FFFFFF><table border=0 cellspacing=1 cellpadding=0 width=180 Author="wayx" height=23>';
+strFrame+='      <tr align=center Author="wayx"><td width=16 align=center bgcolor=#B6CAE4 style="font-size:12px;cursor: hand;color: #ffffff" ';
+strFrame+='        onclick="parent.knowskyPrevM()" title="向前翻 1 月" Author=knowsky><b Author=knowsky><</b>';
+strFrame+='        </td><td width=60 align=center style="font-size:12px;cursor:default" Author=knowsky ';
+strFrame+='onmouseover="style.backgroundColor=\'#D7E1F0\'" onmouseout="style.backgroundColor=\'white\'" ';
+strFrame+='onclick="parent.tmpSelectYearInnerHTML(this.innerText.substring(0,4))" title="点击这里选择年份"><span Author=knowsky id=knowskyYearHead></span></td>';
+strFrame+='<td width=48 align=center style="font-size:12px;cursor:default" Author=knowsky onmouseover="style.backgroundColor=\'#D7E1F0\'" ';
+strFrame+=' onmouseout="style.backgroundColor=\'white\'" onclick="parent.tmpSelectMonthInnerHTML(this.innerText.length==3?this.innerText.substring(0,1):this.innerText.substring(0,2))"';
+strFrame+='        title="点击这里选择月份"><span id=knowskyMonthHead Author=knowsky></span></td>';
+strFrame+='        <td width=16 bgcolor=#B6CAE4 align=center style="font-size:12px;cursor: hand;color: #ffffff" ';
+strFrame+='         onclick="parent.knowskyNextM()" title="向后翻 1 月" Author=knowsky><b Author=knowsky>></b></td></tr>';
+strFrame+='    </table></td></tr>';
+strFrame+='  <tr Author="wayx"><td width=180 height=18 Author="wayx">';
+strFrame+='<table border=1 cellspacing=0 cellpadding=0 bgcolor=#618BC5 ' + (bMoveable? 'onmousedown="DragStart()" onmouseup="DragEnd()"':'');
+strFrame+=' BORDERCOLORLIGHT=#3677b1 bgcolor=#5168C8 BORDERCOLORDARK=#FFFFFF width="100%" height=25 Author="wayx" style="cursor:' + (bMoveable ? 'move':'default') + '">';
+strFrame+='<tr Author="wayx" valign="middle" align="center"><td style="font-size:12px;color:#FFFFFF" Author=knowsky><b>日</b></td>';
+strFrame+='<td style="font-size:12px;color:#FFFFFF"  Author=knowsky><b>一</b></td><td style="font-size:12px;color:#FFFFFF" Author=knowsky><b>二</b></td>';
+strFrame+='<td style="font-size:12px;color:#FFFFFF" Author=knowsky><b>三</b></td><td style="font-size:12px;color:#FFFFFF" Author=knowsky><b>四</b></td>';
+strFrame+='<td style="font-size:12px;color:#FFFFFF"   Author=knowsky><b>五</b></td><td style="font-size:12px;color:#FFFFFF" Author=knowsky><b>六</b></td></tr>';
+strFrame+='</table></td></tr><!-- Author:F.R.Huang(knowsky) http://www.knowsky.com/ mail: knowsky@hzcnc.com 2002-10-8 -->';
+strFrame+='  <tr Author="wayx"><td width="100%" height=120 Author="wayx">';
+strFrame+='    <table border=1 cellspacing=2 cellpadding=0 borderColorDark=#ffffff bgColor=#FFFFFF borderColorLight=#83A4D1 width="100%" height=120 Author="wayx">';
+var n=0; for (j=0;j<5;j++){ strFrame+= ' <tr align=center Author="wayx">'; for (i=0;i<7;i++){
+strFrame+='<td width=25 height=25 id=knowskyDay'+n+' style="font-size:12px" Author=knowsky onclick=parent.knowskyDayClick(this.innerText,0)></td>';n++;}
+strFrame+='</tr>';}
+strFrame+='      <tr align=center Author="wayx">';
+for (i=35;i<39;i++)strFrame+='<td width=25 height=25 id=knowskyDay'+i+' style="font-size:12px" Author=wayx onclick="parent.knowskyDayClick(this.innerText,0)"></td>';
+strFrame+='        <td colspan=3 align=right Author=knowsky><span onclick=parent.closeLayer() style="font-size:12px;cursor: hand"';
+strFrame+='         Author=knowsky title="' + _VersionInfo + '"><u>关闭</u></span> </td></tr>';
+strFrame+='    </table></td></tr><tr Author="wayx"><td Author="wayx">';
+strFrame+='        <table border=0 cellspacing=1 cellpadding=0 width=100% Author="wayx" bgcolor=#FFFFFF>';
+strFrame+='          <tr Author="wayx"><td Author=knowsky align=left><input Author=knowsky type=button class=button style="cursor:hand" value="<<" title="向前翻 1 年" onclick="parent.knowskyPrevY()" ';
+strFrame+='             onfocus="this.blur()" style="font-size: 12px; height: 20px"><input Author=knowsky class=button title="向前翻 1 月" type=button ';
+strFrame+='             value="< " style="cursor:hand" onclick="parent.knowskyPrevM()" onfocus="this.blur()" style="font-size: 12px; height: 20px"></td><td ';
+strFrame+='             Author=knowsky align=center><input Author=knowsky style="cursor:hand"  type=button class=button value=Today onclick="parent.knowskyToday()" ';
+strFrame+='             onfocus="this.blur()" title="当前日期" style="font-size: 12px; height: 20px; cursor:hand"></td><td ';
+strFrame+='             Author=knowsky align=right><input Author=knowsky type=button class=button value=" >" style="cursor:hand" onclick="parent.knowskyNextM()" ';
+strFrame+='             onfocus="this.blur()" title="向后翻 1 月" class=button style="font-size: 12px; height: 20px"><input ';
+strFrame+='             Author=knowsky type=button class=button style="cursor:hand" value=">>" title="向后翻 1 年" onclick="parent.knowskyNextY()"';
+strFrame+='             onfocus="this.blur()" style="font-size: 12px; height: 20px"></td>';
+strFrame+='</tr></table></td></tr></table></td></tr></table></div>';
+
+window.frames.knowskyDateLayer.document.writeln(strFrame);
+window.frames.knowskyDateLayer.document.close();		//解决ie进度条不结束的问题
+
+//==================================================== WEB 页面显示部分 ======================================================
+var outObject;
+var outButton;		//点击的按钮
+var outDate="";		//存放对象的日期
+var odatelayer=window.frames.knowskyDateLayer.document.all;		//存放日历对象
+function setday(tt,obj) //主调函数
+{
+	if (arguments.length >  2){alert("对不起！传入本控件的参数太多！");return;}
+	if (arguments.length == 0){alert("对不起！您没有传回本控件任何参数！");return;}
+	var dads  = document.all.knowskyDateLayer.style;
+	var th = tt;
+	var ttop  = tt.offsetTop;     //TT控件的定位点高
+	var thei  = tt.clientHeight;  //TT控件本身的高
+	var tleft = tt.offsetLeft;    //TT控件的定位点宽
+	var ttyp  = tt.type;          //TT控件的类型
+	while (tt = tt.offsetParent){ttop+=tt.offsetTop; tleft+=tt.offsetLeft;}
+	dads.top  = (ttyp=="image")? ttop+thei : ttop+thei+6;
+	dads.left = tleft;
+	outObject = (arguments.length == 1) ? th : obj;
+	outButton = (arguments.length == 1) ? null : th;	//设定外部点击的按钮
+	//根据当前输入框的日期显示日历的年月
+	var reg = /^(\d+)-(\d{1,2})-(\d{1,2})$/; 
+	var r = outObject.value.match(reg); 
+	if(r!=null){
+		r[2]=r[2]-1; 
+		var d= new Date(r[1], r[2],r[3]); 
+		if(d.getFullYear()==r[1] && d.getMonth()==r[2] && d.getDate()==r[3]){
+			outDate=d;		//保存外部传入的日期
+		}
+		else outDate="";
+			knowskySetDay(r[1],r[2]+1);
+	}
+	else{
+		outDate="";
+		knowskySetDay(new Date().getFullYear(), new Date().getMonth() + 1);
+	}
+	dads.display = '';
+
+	event.returnValue=false;
+}
+
+var MonHead = new Array(12);    		   //定义阳历中每个月的最大天数
+	MonHead[0] = 31; MonHead[1] = 28; MonHead[2] = 31; MonHead[3] = 30; MonHead[4]  = 31; MonHead[5]  = 30;
+	MonHead[6] = 31; MonHead[7] = 31; MonHead[8] = 30; MonHead[9] = 31; MonHead[10] = 30; MonHead[11] = 31;
+
+var knowskyTheYear=new Date().getFullYear(); //定义年的变量的初始值
+var knowskyTheMonth=new Date().getMonth()+1; //定义月的变量的初始值
+var knowskyWDay=new Array(39);               //定义写日期的数组
+
+function document.onclick() //任意点击时关闭该控件	//ie6的情况可以由下面的切换焦点处理代替
+{ 
+with(window.event)
+{ if (srcElement.getAttribute("Author")==null && srcElement != outObject && srcElement != outButton)
+	closeLayer();
+}
+}
+
+function document.onkeyup()		//按Esc键关闭，切换焦点关闭
+{
+	if (window.event.keyCode==27){
+		if(outObject)outObject.blur();
+		closeLayer();
+	}
+	else if(document.activeElement)
+		if(document.activeElement.getAttribute("Author")==null && document.activeElement != outObject && document.activeElement != outButton)
+		{
+			closeLayer();
+		}
+}
+
+function knowskyWriteHead(yy,mm)  //往 head 中写入当前的年与月
+{
+	odatelayer.knowskyYearHead.innerText  = yy + " 年";
+	odatelayer.knowskyMonthHead.innerText = mm + " 月";
+}
+
+function tmpSelectYearInnerHTML(strYear) //年份的下拉框
+{
+if (strYear.match(/\D/)!=null){alert("年份输入参数不是数字！");return;}
+var m = (strYear) ? strYear : new Date().getFullYear();
+if (m < 1000 || m > 9999) {alert("年份值不在 1000 到 9999 之间！");return;}
+var n = m - 10;
+if (n < 1000) n = 1000;
+if (n + 26 > 9999) n = 9974;
+var s = "   <select Author=knowsky name=tmpSelectYear style='font-size: 12px' "
+	s += "onblur='document.all.tmpSelectYearLayer.style.display=\"none\"' "
+	s += "onchange='document.all.tmpSelectYearLayer.style.display=\"none\";"
+	s += "parent.knowskyTheYear = this.value; parent.knowskySetDay(parent.knowskyTheYear,parent.knowskyTheMonth)'>\r\n";
+var selectInnerHTML = s;
+for (var i = n; i < n + 26; i++)
+{
+	if (i == m)
+	{selectInnerHTML += "<option Author=wayx value='" + i + "' selected>" + i + "年" + "</option>\r\n";}
+	else {selectInnerHTML += "<option Author=wayx value='" + i + "'>" + i + "年" + "</option>\r\n";}
+}
+selectInnerHTML += "</select>";
+odatelayer.tmpSelectYearLayer.style.display="";
+odatelayer.tmpSelectYearLayer.innerHTML = selectInnerHTML;
+odatelayer.tmpSelectYear.focus();
+}
+
+function tmpSelectMonthInnerHTML(strMonth) //月份的下拉框
+{
+if (strMonth.match(/\D/)!=null){alert("月份输入参数不是数字！");return;}
+var m = (strMonth) ? strMonth : new Date().getMonth() + 1;
+var s = "     <select Author=knowsky name=tmpSelectMonth style='font-size: 12px' "
+	s += "onblur='document.all.tmpSelectMonthLayer.style.display=\"none\"' "
+	s += "onchange='document.all.tmpSelectMonthLayer.style.display=\"none\";"
+	s += "parent.knowskyTheMonth = this.value; parent.knowskySetDay(parent.knowskyTheYear,parent.knowskyTheMonth)'>\r\n";
+var selectInnerHTML = s;
+for (var i = 1; i < 13; i++)
+{
+	if (i == m)
+	{selectInnerHTML += "<option Author=wayx value='"+i+"' selected>"+i+"月"+"</option>\r\n";}
+	else {selectInnerHTML += "<option Author=wayx value='"+i+"'>"+i+"月"+"</option>\r\n";}
+}
+selectInnerHTML += "</select>";
+odatelayer.tmpSelectMonthLayer.style.display="";
+odatelayer.tmpSelectMonthLayer.innerHTML = selectInnerHTML;
+odatelayer.tmpSelectMonth.focus();
+}
+
+function closeLayer()               //这个层的关闭
+{
+	document.all.knowskyDateLayer.style.display="none";
+}
+
+function IsPinYear(year)            //判断是否闰平年
+{
+	if (0==year%4&&((year%100!=0)||(year%400==0))) return true;else return false;
+}
+
+function GetMonthCount(year,month)  //闰年二月为29天
+{
+	var c=MonHead[month-1];if((month==2)&&IsPinYear(year)) c++;return c;
+}
+function GetDOW(day,month,year)     //求某天的星期几
+{
+	var dt=new Date(year,month-1,day).getDay()/7; return dt;
+}
+
+function knowskyPrevY()  //往前翻 Year
+{
+	if(knowskyTheYear > 999 && knowskyTheYear <10000){knowskyTheYear--;}
+	else{alert("年份超出范围（1000-9999）！");}
+	knowskySetDay(knowskyTheYear,knowskyTheMonth);
+}
+function knowskyNextY()  //往后翻 Year
+{
+	if(knowskyTheYear > 999 && knowskyTheYear <10000){knowskyTheYear++;}
+	else{alert("年份超出范围（1000-9999）！");}
+	knowskySetDay(knowskyTheYear,knowskyTheMonth);
+}
+function knowskyToday()  //Today Button
+{
+	var today;
+	knowskyTheYear = new Date().getFullYear();
+	knowskyTheMonth = new Date().getMonth()+1;
+	today=new Date().getDate();
+	//knowskySetDay(knowskyTheYear,knowskyTheMonth);
+	if(outObject){
+		outObject.value=knowskyTheYear + "-" + knowskyTheMonth + "-" + today;
+	}
+	closeLayer();
+}
+function knowskyPrevM()  //往前翻月份
+{
+	if(knowskyTheMonth>1){knowskyTheMonth--}else{knowskyTheYear--;knowskyTheMonth=12;}
+	knowskySetDay(knowskyTheYear,knowskyTheMonth);
+}
+function knowskyNextM()  //往后翻月份
+{
+	if(knowskyTheMonth==12){knowskyTheYear++;knowskyTheMonth=1}else{knowskyTheMonth++}
+	knowskySetDay(knowskyTheYear,knowskyTheMonth);
+}
+
+function knowskySetDay(yy,mm)   //主要的写程序**********
+{
+knowskyWriteHead(yy,mm);
+//设置当前年月的公共变量为传入值
+knowskyTheYear=yy;
+knowskyTheMonth=mm;
+  
+for (var i = 0; i < 39; i++){knowskyWDay[i]=""};  //将显示框的内容全部清空
+var day1 = 1,day2=1,firstday = new Date(yy,mm-1,1).getDay();  //某月第一天的星期几
+for (i=0;i<firstday;i++)knowskyWDay[i]=GetMonthCount(mm==1?yy-1:yy,mm==1?12:mm-1)-firstday+i+1	//上个月的最后几天
+for (i = firstday; day1 < GetMonthCount(yy,mm)+1; i++){knowskyWDay[i]=day1;day1++;}
+for (i=firstday+GetMonthCount(yy,mm);i<39;i++){knowskyWDay[i]=day2;day2++}
+for (i = 0; i < 39; i++)
+{ var da = eval("odatelayer.knowskyDay"+i)     //书写新的一个月的日期星期排列
+	if (knowskyWDay[i]!="")
+	{ 
+		//初始化边框
+		da.borderColorLight="#76A0CF";
+		da.borderColorDark="#76A0CF";
+		if(i<firstday)		//上个月的部分
+		{
+			da.innerHTML="<font style=' color: #B5C5D2;'>" + knowskyWDay[i] + "</font>";
+			da.title=(mm==1?12:mm-1) +"月" + knowskyWDay[i] + "日";
+			da.onclick=Function("knowskyDayClick(this.innerText,-1)");
+			
+			if(!outDate)
+				da.style.backgroundColor = ((mm==1?yy-1:yy) == new Date().getFullYear() && 
+					(mm==1?12:mm-1) == new Date().getMonth()+1 && knowskyWDay[i] == new Date().getDate()) ?
+					"#E4E3F2":"#FFFFFF";
+			else
+			{
+				da.style.backgroundColor =((mm==1?yy-1:yy)==outDate.getFullYear() && (mm==1?12:mm-1)== outDate.getMonth() + 1 && 
+				knowskyWDay[i]==outDate.getDate())? "#E8F5E7" : // 选中日期颜色
+				(((mm==1?yy-1:yy) == new Date().getFullYear() && (mm==1?12:mm-1) == new Date().getMonth()+1 && 
+				knowskyWDay[i] == new Date().getDate()) ? "#E4E3F2":"#FFFFFF"); // 当前系统时间颜色
+				//将选中的日期显示为凹下去
+				if((mm==1?yy-1:yy)==outDate.getFullYear() && (mm==1?12:mm-1)== outDate.getMonth() + 1 && 
+				knowskyWDay[i]==outDate.getDate())
+				{
+					//da.borderColorLight="#E4E3F2";
+//					da.borderColorDark="#E4E3F2";  // 	选择日期边框颜色
+				}
+			}
+			
+		}
+		else if (i>=firstday+GetMonthCount(yy,mm))		//下个月的部分
+		{
+			da.innerHTML="<font style=' color: #B5C5D2;'>" + knowskyWDay[i] + "</font>";
+			da.title=(mm==12?1:mm+1) +"月" + knowskyWDay[i] + "日";
+			da.onclick=Function("knowskyDayClick(this.innerText,1)");
+			if(!outDate)
+				da.style.backgroundColor = ((mm==12?yy+1:yy) == new Date().getFullYear() && 
+					(mm==12?1:mm+1) == new Date().getMonth()+1 && knowskyWDay[i] == new Date().getDate()) ?
+					"#E4E3F2":"#FFFFFF";
+			else
+			{
+				da.style.backgroundColor =((mm==12?yy+1:yy)==outDate.getFullYear() && (mm==12?1:mm+1)== outDate.getMonth() + 1 && 
+				knowskyWDay[i]==outDate.getDate())? "#E8F5E7" : // 选中日期颜色
+				(((mm==12?yy+1:yy) == new Date().getFullYear() && (mm==12?1:mm+1) == new Date().getMonth()+1 && 
+				knowskyWDay[i] == new Date().getDate()) ? "#E4E3F2":"#FFFFFF"); // 当前系统时间
+				//将选中的日期显示为凹下去
+				if((mm==12?yy+1:yy)==outDate.getFullYear() && (mm==12?1:mm+1)== outDate.getMonth() + 1 && 
+				knowskyWDay[i]==outDate.getDate())
+				{
+					da.borderColorLight="#E4E3F2";
+					da.borderColorDark="#E4E3F2";  // 	选择日期边框颜色
+				}
+			}
+		}
+		else		//本月的部分
+		{
+			da.innerHTML="<font style=' color: #3E5468;'>" + knowskyWDay[i] + "</FONT>";
+			da.title=mm +"月" + knowskyWDay[i] + "日";
+			da.onclick=Function("knowskyDayClick(this.innerText,0)");		//给td赋予onclick事件的处理
+			//如果是当前选择的日期，则显示亮蓝色的背景；如果是当前日期，则显示暗黄色背景
+			if(!outDate)
+				da.style.backgroundColor = (yy == new Date().getFullYear() && mm == new Date().getMonth()+1 && knowskyWDay[i] == new Date().getDate())?
+					"#FFFFFF":"#FFFFFF";
+			else
+			{
+				da.style.backgroundColor =(yy==outDate.getFullYear() && mm== outDate.getMonth() + 1 && knowskyWDay[i]==outDate.getDate())?
+					"#D5ECD2":((yy == new Date().getFullYear() && mm == new Date().getMonth()+1 && knowskyWDay[i] == new Date().getDate())?
+					"#E4E3F2":"#F8F8FC"); // 前一个当前系统时间,后一个是本月时间低色
+				//将选中的日期显示为凹下去
+				if(yy==outDate.getFullYear() && mm== outDate.getMonth() + 1 && knowskyWDay[i]==outDate.getDate())
+				{
+					//da.borderColorLight="#E4E3F2";
+					//da.borderColorDark="#E4E3F2";  // 	选择日期边框颜色
+				}
+			}
+		}
+		da.style.cursor="hand"
+		da.onmouseover=Function("this.backgroundColor='#000000';this.borderColorDark='#000099';this.borderColorLight='#000099';");
+		da.onmouseout=Function("this.bgColor='#000000';this.borderColorDark='#9CBADE';this.borderColorLight='#9CBADE';");
+	}
+	else{da.innerHTML="";da.style.backgroundColor="";da.style.cursor="default";da.onmouseover=Function("this.backgroundColor='#000000';this.borderColorDark='#000099';this.borderColorLight='#000099';");
+		da.onmouseout=Function("this.bgColor='#000000';this.borderColorDark='#9CBADE';this.borderColorLight='#9CBADE';");}
+}
+}
+
+function knowskyDayClick(n,ex)  //点击显示框选取日期，主输入函数*************
+{
+var yy=knowskyTheYear;
+var mm = parseInt(knowskyTheMonth)+ex;	//ex表示偏移量，用于选择上个月份和下个月份的日期
+	//判断月份，并进行对应的处理
+	if(mm<1){
+		yy--;
+		mm=12+mm;
+	}
+	else if(mm>12){
+		yy++;
+		mm=mm-12;
+	}
+	
+if (mm < 10){mm = "0" + mm;}
+if (outObject)
+{
+	if (!n) {//outObject.value=""; 
+	return;}
+	if ( n < 10){n = "0" + n;}
+	outObject.value= yy + "-" + mm + "-" + n ; //注：在这里你可以输出改成你想要的格式
+	closeLayer(); 
+}
+else {closeLayer(); alert("您所要输出的控件对象并不存在！");}
+}
+//-->
+</script>
+
+<script >
+    /*
+    var arr=new Array;
+    arr[0]=[new Option("市",'-1')];
+    arr[1]=[new Option("")]
+    function change(index){
+        var s=
+        */
+        var city=[
+        ["东城区","西城区", "崇文区", "宣武区","朝阳区","海淀区","丰台区","石景山区","房山区","通州区","顺义区","昌平区",
+        "大兴区","怀柔区","平谷区","门头沟区","密云区","延庆区","其他"],
+        ["广州","深圳", "珠海","汕头","韶关","佛山","江门","湛江","茂名","肇庆","惠州","梅州","汕尾","河源","阳江","清远",
+        "东莞","中山","潮州","揭阳","云浮","其他"],
+        ["黄浦区","卢湾区", "徐汇区","长宁区","静安区","普陀区","闸北区","虹口区","杨浦区","宝山区","闵行区","嘉定区","松江区",
+        "金山区","青浦区","南汇区","奉贤区","浦东新区","崇明区","其他"],
+        ["和平区","河东区", "河西区","南开区","河北区","红桥区","塘沽区","汉沽区","大港区","东丽区","西青区","北辰区","津南区",
+        "武清区","宝坻区","静海县","宁河县","蓟县","其他"],
+        ["渝中区","大渡口区", "江北区","南岸区","北碚区","渝北区","巴南区","长寿区","双桥区","沙坪坝区","万盛区","万州区","涪陵区",
+        "黔江区","永川区","合川区","江津区","九龙坡区","南川区","綦江县","潼南区","荣昌区","璧山区","大足区","铜梁县",
+        "梁平县","开县","忠县","城口县","垫江区","武隆县","丰都县","奉节县","云阳县","巫溪县","巫山县","其他"],
+        ["沈阳","大连","鞍山","抚顺","本溪","丹东","锦州","营口","阜新","辽阳","盘锦","铁岭","朝阳","葫芦岛","其他"],
+        ["南京","苏州","无锡","常州","镇江","南通","泰州","扬州","盐城","连云港","徐州","淮安","宿州","其他"],
+        ["武汉","黄石","十堰","荆州","宜昌","襄樊","鄂州","荆门","孝感","黄冈","咸宁","随州","仙桃","天门","潜江","神农架","其他"],
+        ["成都","自贡","攀枝花","泸州","德阳","绵阳","广元","遂宁","内江","乐山","南充","眉山","宜宾","广安","达州","雅安","巴中","资阳","其他"],
+        ["西安","铜川","宝鸡","咸阳","渭南","延安","汉中","榆林","安康","商洛","其他"],
+        ["石家庄","唐山","秦皇岛","邯郸","邢台","保定","张家口","承德","沧州","廊坊","衡水","其他"],
+        ["太原","大同","阳泉","长治","晋城","朔州","晋中","运城","忻州","临汾","吕梁","其他"],
+        ["郑州","开封","洛阳","平顶山","安阳","鹤壁","新乡","焦作","濮阳","许昌","漯河","三门峡","南阳","商丘","信阳","周口","驻马店","焦作","其他"],
+        ["吉林","四平","辽源","通化","白山","松原","白城","延边朝鲜自治区","其他"],
+        ["哈尔滨","齐齐哈尔","鹤岗","双鸭山","鸡西","大庆","伊春","牡丹江","佳木斯","七台河","黑河","绥远","大兴安岭地区","其他"],
+        ["呼和浩特","包头","乌海","赤峰","通辽","鄂尔多斯","呼伦贝尔","巴彦淖尔","乌兰察布","锡林郭勒盟","兴安盟","阿拉善盟"],
+        ["济南","青岛","淄博","枣庄","东营","烟台","潍坊","济宁","泰安","威海","日照","莱芜","临沂","德州","聊城","滨州","菏泽","其他"],
+        ["合肥","芜湖","蚌埠","淮南","马鞍山","淮北","铜陵","安庆","黄山","滁州","阜阳","宿州","巢湖","六安","亳州","池州","宣城"],
+        ["杭州","宁波","温州","嘉兴","湖州","绍兴","金华","衢州","舟山","台州","丽水","其他"],
+        ["福州","厦门","莆田","三明","泉州","漳州","南平","龙岩","宁德","其他"],
+        ["长沙","株洲","湘潭","衡阳","邵阳","岳阳","常德","张家界","益阳","滨州","永州","怀化","娄底","其他"],
+        ["南宁","柳州","桂林","梧州","北海","防城港","钦州","贵港","玉林","百色","贺州","河池","来宾","崇左","其他"],
+        ["南昌","景德镇","萍乡","九江","新余","鹰潭","赣州","吉安","宜春","抚州","上饶","其他"],
+        ["贵阳","六盘水","遵义","安顺","铜仁","毕节","其他"],
+        ["昆明","曲靖","玉溪","保山","邵通","丽江","普洱","临沧","其他"],
+        ["拉萨","那曲地区","昌都地区","林芝地区","山南区","阿里区","日喀则","其他"],
+        ["海口","三亚","五指山","琼海","儋州","文昌","万宁","东方","澄迈县","定安县","屯昌县","临高县","其他"],
+        ["兰州","嘉峪关","金昌","白银","天水","武威","酒泉","张掖","庆阳","平凉","定西","陇南","临夏","甘南","其他"],
+        ["银川","石嘴山","吴忠","固原","中卫","其他"],
+        ["西宁","海东地区","海北藏族自治区","海南藏族自治区","黄南藏族自治区","果洛藏族自治区","玉树藏族自治州","还西藏族自治区","其他"],
+        ["乌鲁木齐","克拉玛依","吐鲁番地区","哈密地区","和田地区","阿克苏地区","喀什地区","克孜勒苏柯尔克孜","巴音郭楞蒙古自治区",
+        "昌吉回族自治州","博尔塔拉蒙古自治区","石河子","阿拉尔","图木舒克","五家渠","伊犁哈萨克自治区","其他"],
+        ["中西区","湾仔区","东区","南区","深水埗区","油尖旺区","九龙城区","黄大仙区","观塘区","北区","大埔区","沙田区","西贡区",
+        "元朗区","屯门区","荃湾区","葵青区","离岛区","其他"],
+        ["花地玛塘区","圣安多尼塘区","大堂区","望德堂区","风顺堂区","嘉模堂区","圣方济各堂区","路凼","其他"],
+        ["台北市","高雄市","台北县","桃园县","新竹县","苗栗县","台中县","彰化县","南投县","云林县","嘉义县","台南县","高雄县",
+        "屏东县","宜兰县","花莲县","台东县","澎湖县","基隆市","新竹市","台中市","嘉义市","台南市","其他"],
+        ["海外","其他"],
+        ["其他"]];
+    
+    
+    function getcity(){
+    /*
+    var sltCity = document.getElementById('s2') ;
+        sltCity.innerHTML='';
+        for(i=0;i<city[index].length;i++){
+            sltCity.options[sltCity.options.length]=city[index][i];
+        }
+    
+    */
+    var sltProvince = document.getElementById("province") ;        
+    var sltCity = document.getElementById("city") ;      
+        
+    var provinceCity = city[sltProvince.selectedIndex - 1];         
+    sltCity.length = 1 ;
+       
+    for ( i = 0 ; i < provinceCity.length ; i++ ) {
+           sltCity[i + 1] = new Option(provinceCity[i], provinceCity[i]) ;
+    }
+    
+    }
+    </script>
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>一路上有你</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+      <li><a href="/{{Emailaddress}}/main">热门景点</a></li>
+      <li class="current_page_item"><a href="">个性推荐</a></li>
+      <li><a href="/{{Emailaddress}}/foot">我的足迹</a></li>
+	  <li><a href="/{{Emailaddress}}/willgo">意向发布</a></li>
+      <li><a href="/{{Emailaddress}}/fillinformation">完善个人信息</a></li>
+      <li><a href="/{{Emailaddress}}/security">安全中心</a></li>
+	  <li><a href="/{{Emailaddress}}/myteam">我的队伍</a></li>
+
+    </ul>
+
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+      <div style="padding-bottom: 10px;">
+	  <font color="#FFFFFF" size="6"  face="微软雅黑">TA的旅游意向</font>
+	  </br>
+	  </br>
+	  </br>
+	  <form action="" method="post" >
+	{% csrf_token %}
+	{%if submit%}
+	<p>TA：&nbsp&nbsp <input type="text" name="user" value = {{show_user}}></p>
+	{%else%}
+	<p>TA：&nbsp&nbsp <input type="text" name="user"></p>
+	{%endif%}
+	{%if submit%}
+	<p>地点：<select id="province" name="province" onchange="getcity()">
+    <option value='-1'>{{show_province}}</option>
+    <option value="北京市">北京市 </option>
+                   <option value="广东省">广东省 </option>
+                 <option value="上海市">上海市 </option>
+                   <option value="天津市">天津市 </option>
+                   <option value="重庆市">重庆市 </option>
+                   <option value="辽宁省">辽宁省</option>
+                   <option value="江苏省">江苏省</option>
+                   <option value="湖北省">湖北省</option>
+                   <option value="四川省">四川省</option>
+                   <option value="陕西省">陕西省</option>
+                   <option value="河北省">河北省</option>
+                   <option value="山西省">山西省</option>
+                   <option value="河南省">河南省</option>
+                   <option value="吉林省">吉林省</option>
+                   <option value="黑龙江">黑龙江</option>
+                   <option value="内蒙古">内蒙古</option>
+                   <option value="山东省">山东省</option>
+                   <option value="安徽省">安徽省</option>
+                   <option value="浙江省">浙江省</option>
+                   <option value="福建省">福建省</option>
+                   <option value="湖南省">湖南省</option>
+                   <option value="广西省">广西省</option>
+                   <option value="江西省">江西省</option>
+                   <option value="贵州省">贵州省</option>
+                   <option value="云南省">云南省</option>
+                   <option value="西藏">西藏</option>
+                   <option value="海南省">海南省</option>
+                   <option value="甘肃省">甘肃省</option>
+                   <option value="宁夏">宁夏</option>
+                   <option value="青海省">青海省</option>
+                   <option value="新疆">新疆</option>
+                   <option value="香港">香港</option>
+                   <option value="澳门">澳门</option>
+                   <option value="台湾">台湾</option>
+                   <option value="海外">海外</option>
+                   <option value="其他">其他</option>
+    </select>
+    省
+    <select id="city" name="city">
+    <option value='-1'>{{show_city}}</option>
+    </select>
+	市</p>
+	{%else%}
+	<p>地点：<select id="province" name="province" onchange="getcity()">
+    <option value="-1">选择省份</option>
+    <option value="北京市">北京市 </option>
+                   <option value="广东省">广东省 </option>
+                 <option value="上海市">上海市 </option>
+                   <option value="天津市">天津市 </option>
+                   <option value="重庆市">重庆市 </option>
+                   <option value="辽宁省">辽宁省</option>
+                   <option value="江苏省">江苏省</option>
+                   <option value="湖北省">湖北省</option>
+                   <option value="四川省">四川省</option>
+                   <option value="陕西省">陕西省</option>
+                   <option value="河北省">河北省</option>
+                   <option value="山西省">山西省</option>
+                   <option value="河南省">河南省</option>
+                   <option value="吉林省">吉林省</option>
+                   <option value="黑龙江">黑龙江</option>
+                   <option value="内蒙古">内蒙古</option>
+                   <option value="山东省">山东省</option>
+                   <option value="安徽省">安徽省</option>
+                   <option value="浙江省">浙江省</option>
+                   <option value="福建省">福建省</option>
+                   <option value="湖南省">湖南省</option>
+                   <option value="广西省">广西省</option>
+                   <option value="江西省">江西省</option>
+                   <option value="贵州省">贵州省</option>
+                   <option value="云南省">云南省</option>
+                   <option value="西藏">西藏</option>
+                   <option value="海南省">海南省</option>
+                   <option value="甘肃省">甘肃省</option>
+                   <option value="宁夏">宁夏</option>
+                   <option value="青海省">青海省</option>
+                   <option value="新疆">新疆</option>
+                   <option value="香港">香港</option>
+                   <option value="澳门">澳门</option>
+                   <option value="台湾">台湾</option>
+                   <option value="海外">海外</option>
+                   <option value="其他">其他</option>
+    </select>
+    省
+    <select id="city" name="city">
+    <option value="-1">市</option>
+    </select>
+	市</p>
+	{%endif%}
+	
+	{%if submit%}
+	<p>时间：<input type="text" name="date0" style="width:146px;" onclick="setday(this)" value = {{show_date0}}> ~ <input type="text" name="date1" style="width:146px;" onclick="setday(this)" value = {{show_date1}}></p>
+	{%else%}
+	<p>时间：<input type="text" name="date0" style="width:146px;" onclick="setday(this)"> ~ <input type="text" name="date1" style="width:146px;" onclick="setday(this)"></p>
+	{%endif%}
+	
+	{%if submit%}
+	<p>花费：<input type="text" name="cost0" value = {{show_cost0}}> ~ <input type="text" name="cost1" value = {{show_cost1}}></p>
+	{%else%}
+	<p>花费：<input type="text" name="cost0"> ~ <input type="text" name="cost1"></p>
+	{%endif%}
+     <input type="submit" value="点击这里筛选">
+	 </br>
+	 </br>
+	 <a href="">查看全部 >></a>
+    </form>
+	  </br>
+	  </br>
+	  <p>
+	  <table border="1" align = "center">
+	<tr align = "center">
+	<th>Ta</th>
+	<th>Province</th>
+	<th>City</th>
+	<th>Date</th>
+	<th>LeastCost</th>
+	<th>MostCost</th>
+	<th>Choice</th>
+	<th>Status</th>
+	</tr>
+	{%for i in willgo%}
+	<tr align = "center">
+	<td>{{i.EmailAddress}}</td>
+	<td>{{i.Province}}</td>
+	<td>{{i.City}}</td>
+	<td>{{i.Date}}</td>
+	<td>{{i.Low}}</td>
+	<td>{{i.High}}</td>
+	<td><a href="/{{i.EmailAddress}}/{{i.City}}/{{Emailaddress}}/details">详细</a></td>
+	<td>{{i.Status}}</td>
+	</tr>
+	{% endfor %}
+	</table>
+	  </p>
+	  </div>
+      <div class="post">
+	  </br>
+	  </br>
+	  </br>
+        <font color="#FFFFFF" size="6"  face="微软雅黑">符合您行程的推荐</font>
+		
+        <p>
+				<table border="1" align = "center">
+				<tr align = "center">
+				<th>Ta</th>
+				<th>Province</th>
+				<th>City</th>
+				<th>Date</th>
+				<th>LeastCost</th>
+				<th>MostCost</th>
+				<th>Choice</th>
+				<th>Status</th>
+				</tr>
+				{%for i in recommend_me_willgo%}
+				<tr align = "center">
+				<td>{{i.EmailAddress}}</td>
+				<td>{{i.Province}}</td>
+				<td>{{i.City}}</td>
+				<td>{{i.Date}}</td>
+				<td>{{i.Low}}</td>
+				<td>{{i.High}}</td>
+				<td><a href="/{{i.EmailAddress}}/{{i.City}}/{{Emailaddress}}/details">详细</a></td>
+				<td>{{i.Status}}</td>
+				</tr>
+				{% endfor %}
+				</table>
+		</p>
+        <div class="entry" style="text-indent:4em">
+          <p></p>
+		  <h2>{% for friend in friends %}
+					<a href="/{{friend}}/information">{{friend.Name}} </a>
+				{% endfor %}</h2>
+          <p></p>
+        </div>
+      </div>
+      <div class="post">
+
+
+        <div class="entry">
+          <p></p>
+          <p></p>
+        </div>
+      </div>
+      <div class="post">
+        <div class="entry"  style="text-indent:4em">
+          <p></p>
+		  <h2>{% for friend in friends %}
+					<a href="/{{friend}}/information">{{friend.Name}} </a>
+				{% endfor %}</h2>
+          <p></p>
+        </div>
+      </div>
+    </div>
+    <!-- end content -->
+    <!-- start sidebars -->
+    <div id="sidebar1" class="sidebar">
+      <ul>
+        {%for element in View1%}
+        <li>
+          <h2>{{element}}</h2>
+          <ul>
+			<a href="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D{{element}}" target＝_blank><img height="200px" width="170px" src="/static/images/{{element}}.jpg" alt="" /></a>
+          </ul>
+        </li>
+    {% endfor %}
+      </ul>
+    </div>
+	<div id="sidebar2" class="sidebar">
+      <ul>
+		<li>
+          <font color="#FFFFFF" size="3"  face="微软雅黑">您以{{Emailaddress}}登录</font>
+        </li>
+        {%for element in View2%}
+        <li>
+          <h2>{{element}}</h2>
+          <ul>
+            <a href="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D{{element}}" target＝_blank><img height="200px" width="170px" src="/static/images/{{element}}.jpg" alt="" /></a>
+          </ul>
+        </li>
+    {% endfor %}
+      </ul>
+    </div>
+    <!-- end sidebars -->
+    <div style="clear: both;">&nbsp;</div>
+  </div>
+  <!-- end page -->
+</div>
+<div id="footer">
+  <div id="footer-content">
+    <p>&copy;2015 All Rights Reserved. &nbsp;&nbsp; Design by <a href="/aboutme" target="_blank">Three-Coders</a>.</p>
+  </div>
+</div>
+
+</body>
+</html>

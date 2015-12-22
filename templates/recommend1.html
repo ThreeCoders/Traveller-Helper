@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Recommend</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>一路上有你</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+      <li><a href="/{{Emailaddress}}/main">热门景点</a></li>
+      <li class="current_page_item"><a href="">个性推荐</a></li>
+      <li><a href="/{{Emailaddress}}/foot">我的足迹</a></li>
+      <li><a href="/{{Emailaddress}}/fillinformation">完善个人信息</a></li>
+      <li><a href="/{{Emailaddress}}/security">安全中心</a></li>
+
+    </ul>
+
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+      <div style="padding-bottom: 10px;"><img height="320px" width="500px" src="/static/images/img02.jpg" alt="" /></div>
+      <div class="post">
+        <h1 class="title"><a href="#">我们为您推荐以下驴友：</a></h1>
+        <p class="byline"><small>Posted on November 1st, 2015<a href="#"></a></small></p>
+        <div class="entry">
+          <p>
+		  		{% for friend in friends %}
+					<p>{{friend.Name}} </p>
+				{% endfor %}	  
+		  </p>
+        </div>
+      </div>
+	  
+<!--       <div class="post">
+        <h2 class="title"><a href="#">Nulla luctus eleifend</a></h2>
+        <p class="byline"><small>Posted on October 1st, 2011 by <a href="#"></a></small></p>
+        <div class="entry">
+          <p>热门评论2：Pellentesque viverra vulputate enim. Aliquam erat volutpat. Pellentesque tristique ante ut risus. Quisque dictum. Integer nisl risus, sagittis convallis, rutrum id, elementum congue, nibh. Suspendisse dictum porta lectus. Donec placerat odio vel elit. Nullam ante orci, pellentesque eget, tempus quis, ultrices in, est. Curabitur sit amet nulla. Nam in massa. Sed vel tellus. </p>
+          <p class="links"><a href="#" class="more">Read Full Story</a> &nbsp;&nbsp;&nbsp;</p>
+        </div>
+      </div>
+	  
+      <div class="post">
+        <h2 class="title"><a href="#">Nulla luctus eleifend</a></h2>
+        <p class="byline"><small>Posted on October 1st, 2011 by <a href="#"></a></small></p>
+        <div class="entry">
+          <p>热门评论3：Pellentesque viverra vulputate enim. Aliquam erat volutpat. Pellentesque tristique ante ut risus. Quisque dictum. Integer nisl risus, sagittis convallis, rutrum id, elementum congue, nibh. Suspendisse dictum porta lectus. </p>
+          <p class="links"><a href="#" class="more">Read Full Story</a> &nbsp;&nbsp;&nbsp;</p>
+        </div> -->
+		
+      </div>
+    </div>
+    <!-- end content -->
+    <!-- start sidebars -->
+    <div id="sidebar1" class="sidebar">
+      <ul>
+        {%for element in View1%}
+        <li>
+          <h2>{{element}}</h2>
+          <ul>
+            <img height="200px" width="170px" src="/static/images/{{element}}.jpg" alt="" />
+          </ul>
+        </li>
+    {% endfor %}
+      </ul>
+    </div>
+	<div id="sidebar2" class="sidebar">
+      <ul>
+		<li>
+          <font color="#FFFFFF" size="3"  face="微软雅黑">您以{{Emailaddress}}登录</font>
+        </li>
+        {%for element in View2%}
+        <li>
+          <h2>{{element}}</h2>
+          <ul>
+            <img height="200px" width="170px" src="/static/images/{{element}}.jpg" alt="" />
+          </ul>
+        </li>
+    {% endfor %}
+      </ul>
+    </div>
+    <!-- end sidebars -->
+    <div style="clear: both;">&nbsp;</div>
+  </div>
+  <!-- end page -->
+</div>
+<div id="footer">
+  <div id="footer-content">
+    <p>&copy;2015 All Rights Reserved. &nbsp;&nbsp; Design by <a href="/aboutme" target="_blank">Three-Coders</a>.</p>
+  </div>
+</div>
+
+</body>
+</html>

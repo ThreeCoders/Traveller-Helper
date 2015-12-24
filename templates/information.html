@@ -1,42 +1,47 @@
-<html>
-<body bgcolor="f3f9f1">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<style type="text/css">
-h1 {letter-spacing: 10px}
-h1 {text-decoration: underline}
-h1 {color:#725e82}
-h1 {font-family:"SimHei"}
-h1 {text-indent: 5cm}
-h1.thick {font-weight: bold}
-h4 {color:#bacac6}
-h4 {text-indent: 5cm}
-h1.small {line-height: 5%}
-</style>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Information</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
-
-<br />
-<h1 class="small", class="thick">用户信息</h1>
-<h4>Infomation of Yours</h4>
-
-<head>
-<style type="text/css">
-h3 {text-indent: 5cm}
-h3 {font-family:"KaiTi"}
-h3 {color:#177cb0}
-</style>
-</head>
-
-<h3><span>姓 名：{{User.Name}}</h3>
-<h3><span>性 别：{{User.Gender}}</h3>
-<h3><span>年 龄：{{User.Age}}</h3>
-<h3><span>电 邮：{{User.Email}}</h3>
-<h3><span>性 格：
-{%for element in Character%}
-{{element}}
-{%endfor%}
-</h3>
-<h3><span class="highlight">性格描述：
-{{User.Discription}}
-</h3>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>用户信息</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+    </ul>
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+      <div class="post">
+		<div class="entry">
+          <p>姓 名：{{User.Name}}</p>
+			<p>性 别：{{User.Gender}}</p>
+			<p>年 龄：{{User.Age}}</p>
+			<p>电 邮：{{User.Email}}</p>
+			<p>性 格：
+			{%for element in Character%}
+			{{element}}
+			{%endfor%}
+			</p>
+			<p>性格描述：
+			{{User.Discription}}
+			</p>
+        </div>
+      </div>
 </body>
 </html>

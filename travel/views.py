@@ -18,7 +18,8 @@ import os
 import random
 # Create your views here.
 
-
+def aboutme(request):
+	return render(request, 'aboutme.html', {}, context_instance = RequestContext(request))
 def login(request):
 	error = []
 	if request.method == 'POST':
@@ -87,7 +88,8 @@ def mainpage(request, emailaddress):
 		min = length
 	while len(temp_tcomment) < min and len(temp_tcomment) < 3:
 		rand = random.randint(0, length - 1)
-		temp_tcomment.append(comment[rand])
+		if comment[rand] not in temp_tcomment:
+			temp_tcomment.append(comment[rand])
 	
 	while len(temp_tcomment) > 0:
 		r = random.randint(0, len(temp_tcomment) - 1)
@@ -112,12 +114,6 @@ def mainpage(request, emailaddress):
 		tcomment2 = tcomment[1]
 		tcomment3 = tcomment[2]
 		
-	place1 = ''
-	place2 = ''
-	place3 = ''
-	name1 = ''
-	name2 = ''
-	name3 = ''
 	if Place.objects.filter(Comment=tcomment1):
 		place1 = Place.objects.filter(Comment=tcomment1)[0]
 		name1 = User.objects.filter(EmailAddress=place1.EmailAddress)[0]
@@ -127,12 +123,13 @@ def mainpage(request, emailaddress):
 	if Place.objects.filter(Comment=tcomment3):
 		place3 = Place.objects.filter(Comment=tcomment3)[0]
 		name3 = User.objects.filter(EmailAddress=place3.EmailAddress)[0]
-	city_dict = ["北京", '哈尔滨', '银川', '长春', '沈阳', '天津', '石家庄', '济南', '杭州', '合肥', '福州', '澳门', '香港', '乌鲁木齐', '拉萨', '西宁', '贵州', '昆明', '西安', '兰州', '郑州', '太原', '广州', '桂林', '海口', '无锡', '华山', '黄山', '泰山', '九寨沟', '延安', '张家界', '长白山', '洛阳', '上海', '武汉', '南京']
+	city_dict = ["北京", '哈尔滨', '银川', '长春', '沈阳', '天津', '石家庄', '济南', '杭州', '合肥', '福州', '澳门', '香港', '乌鲁木齐', '拉萨', '西宁', '贵州', '昆明', '西安', '兰州', '郑州', '太原', '广州', '桂林', '海口', '无锡', '华山', '黄山', '泰山', '九寨沟', '成都', '张家界', '长白山', '洛阳', '上海', '武汉', '南京']
 	num = [0, 0, 0]
 	view_city = []
 	while len(view_city) < 8:
 		rand = random.randint(1, 36)
-		view_city.append(city_dict[rand])
+		if city_dict[rand] not in view_city:
+			view_city.append(city_dict[rand])
 	view_city1 = []
 	view_city2 = []
 	for i in range(4):
@@ -293,12 +290,13 @@ def recommend(request, emailaddress):
 	temp111 = []
 	people = []
 	dict = {}
-	city_dict = ["北京", '哈尔滨', '银川', '长春', '沈阳', '天津', '石家庄', '济南', '杭州', '合肥', '福州', '澳门', '香港', '乌鲁木齐', '拉萨', '西宁', '贵州', '昆明', '西安', '兰州', '郑州', '太原', '广州', '桂林', '海口', '无锡', '华山', '黄山', '泰山', '九寨沟', '延安', '张家界', '长白山', '洛阳', '上海', '武汉', '南京']
+	city_dict = ["北京", '哈尔滨', '银川', '长春', '沈阳', '天津', '石家庄', '济南', '杭州', '合肥', '福州', '澳门', '香港', '乌鲁木齐', '拉萨', '西宁', '贵州', '昆明', '西安', '兰州', '郑州', '太原', '广州', '桂林', '海口', '无锡', '华山', '黄山', '泰山', '九寨沟', '成都', '张家界', '长白山', '洛阳', '上海', '武汉', '南京']
 
 	view_city = []
 	while len(view_city) < 8:
 		rand = random.randint(1, 36)
-		view_city.append(city_dict[rand])
+		if city_dict[rand] not in view_city:
+			view_city.append(city_dict[rand])
 	view_city1 = []
 	view_city2 = []
 	for i in range(4):
@@ -318,6 +316,7 @@ def recommend(request, emailaddress):
 		show_province = province
 		if city == '-1':
 			show_city = '市'
+		if province == '-1':
 			show_province = '选择省份'
 		user = request.POST['user']
 		date0 = request.POST['date0']
@@ -326,6 +325,12 @@ def recommend(request, emailaddress):
 		cost1 =request.POST['cost1']
 		
 		submit_willgo1 = submit_willgo
+		if province != '-1':
+			submit_willgo1 = []
+			for i in submit_willgo:
+				if i.Province == province:
+					submit_willgo1.append(i)
+			submit_willgo = submit_willgo1
 		if city != '-1':
 			submit_willgo1 = []
 			for i in submit_willgo:
@@ -363,7 +368,6 @@ def recommend(request, emailaddress):
 			submit_willgo = []
 			for i in submit_willgo1:
 				if i.Low >= int(cost0) and i.High <= int(cost1):
-					print "****"
 					submit_willgo.append(i)
 			submit_willgo1 = submit_willgo
 		return render(request, 'recommend.html', {'submit':submit, 'show_date0':date0, 'show_date1':date1, 'show_cost0':cost0, 'show_cost1':cost1, 'show_user':user, 'show_province':show_province, 'show_city':show_city, 'recommend_me_willgo':recommend_me_willgo, 'willgo':submit_willgo, 'friends':temp111, 'Emailaddress':emailaddress, 'View1':view_city1, 'View2':view_city2}, context_instance = RequestContext(request))
@@ -378,7 +382,7 @@ def recommend(request, emailaddress):
 		temp_user = User.objects.filter(Name=x.EmailAddress)[0]
 		temp_team = Team.objects.filter(Owner=temp_user.EmailAddress, City=x.City, Date=x.Date)[0]
 		count = 0
-		temp_mem = temp_team.Mem.all()
+		temp_mem = temp_team.mem.all()
 		for i in temp_mem:
 			count += 1
 		if temp_date < current_time:
@@ -399,13 +403,17 @@ def foot(request, emailaddress):
 		submitemailaddress = Account.objects.filter(EmailAddress=emailaddress)[0]
 		place = request.POST['place']
 		comment = request.POST['comment']
-		newcomment = Place(EmailAddress=submitemailaddress, Place=place, Order=0, Comment=comment)
+		count = 1
+		while Place.objects.filter(EmailAddress=emailaddress, Number=str(count)):
+			count += 1
+		count = str(count)
+		newcomment = Place(EmailAddress=submitemailaddress, Place=place, Order=0, Comment=comment, Number = count)
 		newcomment.save()
 		if not User.objects.filter(EmailAddress=emailaddress):
 			fillinformation.append(0)
 			return render(request, 'foot.html', {'Fillinformation':fillinformation}, context_instance = RequestContext(request))
 		submit = True
-		return HttpResponseRedirect('/' + emailaddress + '/' + place + '/photos')
+		return HttpResponseRedirect('/' + emailaddress + '/' + count + '/photos')
 	return render(request, 'foot.html', {'Fillinformation':fillinformation, 'Emailaddress':emailaddress, 'Submit':submit, 'Placeview':placeview}, context_instance = RequestContext(request))
 
 def postway(request, strName):
@@ -573,34 +581,60 @@ def security(request, emailaddress):
 	return render(request, 'security.html', {'Emailaddress':emailaddress, 'Error': error, 'Emailaddress':emailaddress, 'Submit':submit}, context_instance = RequestContext(request))
 
 	
-def file_count(dirname,filter_types=[]):
-	count=0
-	filter_is_on=False
-	if filter_types!=[]:
-		filter_is_on=True
-	for item in os.listdir(dirname):
-		abs_item=os.path.join(dirname,item)
-		if os.path.isdir(abs_item): 
-			count+=file_count(abs_item,filter_types)
-		elif os.path.isfile(abs_item):
-			if filter_is_on:
-				extname=os.path.splitext(abs_item)[1]
-				if extname in filter_types:
-					count+=1
-			else:
-				count+=1
-	return count
+# def file_count(dirname,filter_types=[]):
+	# count=0
+	# filter_is_on=False
+	# if filter_types!=[]:
+		# filter_is_on=True
+	# for item in os.listdir(dirname):
+		# abs_item=os.path.join(dirname,item)
+		# if os.path.isdir(abs_item): 
+			# count+=file_count(abs_item,filter_types)
+		# elif os.path.isfile(abs_item):
+			# if filter_is_on:
+				# extname=os.path.splitext(abs_item)[1]
+				# if extname in filter_types:
+					# count+=1
+			# else:
+				# count+=1
+	# return count
+def httpExists(url):
+	host, path = urlparse.urlsplit(url)[1:3]
+	found = 0
+	if isinstance(path,unicode):
+		path = path.encode("gbk")
+	else:
+		path = path.decode("utf-8").encode("gbk")
+	try:
+		connection = httplib.HTTPConnection(host)  ## Make HTTPConnection Object
+		connection.request("HEAD", path)
+		responseOb = connection.getresponse()      ## Grab HTTPResponse Object
+
+		if responseOb.status == 200:
+			found = 1
+		else:
+			print "Status %d %s : %s" % (responseOb.status, responseOb.reason, url)
+	except Exception, e:
+		print e.__class__,  e, url
+	return found
+
 def commentview(request, emailaddress, place):
-	counter = file_count('C:/Users/Paul_Yu/myproject/static/images/' + emailaddress + '/' + place)
+	counter = 0
+	travel_place = Place.objects.filter(EmailAddress=emailaddress, Place=place)[0]
+	number = travel_place.Number
+	while httpExists("http://triphelper-travel.stor.sinaapp.com/" + emailaddress + "_" + number + "_" + str(counter + 1) + ".png"):
+		counter += 1
+	#counter = file_count('http://triphelper-travel.stor.sinaapp.com/{{Emailaddress}}_{{Number}}_{{i}}.png' + emailaddress + '/' + place)
 	#print counter
 	count = []
 	i = 1
 	while i <= counter:
 		count.append(str(i))
 		i += 1
-	re_place = Place.objects.filter(EmailAddress=emailaddress, Place=place)
-	comment = re_place[0].Comment
-	return render_to_response('commentview.html', {'Count':count, 'Emailaddress':emailaddress, 'Place': place, 'Comment':comment})
+	re_place = Place.objects.filter(EmailAddress=emailaddress, Place=place)[0]
+	# number = re_place.Number
+	# comment = re_place[0].Comment
+	return render_to_response('commentview.html', {'Count':count, 'Place': re_place})
 def information(request, name): #想去地方相同且姓名相同的情况有可能会出错
 	user = User.objects.filter(Name=name)[0]
 	character = []
@@ -617,6 +651,8 @@ def information(request, name): #想去地方相同且姓名相同的情况有�
 def willgo(request, emailaddress):
 	submit = False
 	error = []
+	if not User.objects.filter(EmailAddress=emailaddress):
+		error.append('完善信息让大家认识你，才能发布意向哟^!^')
 	if request.method == 'POST':
 		from_place = request.POST['from']
 		province = request.POST['province']
@@ -639,7 +675,8 @@ def willgo(request, emailaddress):
 		owner = Account.objects.filter(EmailAddress=emailaddress)[0]
 		team = Team(Owner=owner, Province=province, City=city, Date=date)
 		team.save()
-		team.Mem.add(User.objects.filter(Name=user)[0])
+		print "success"
+		team.mem.add(User.objects.filter(Name=user)[0])
 		team.save()
 		# Team.objects.all().delete()
 		submit = True
@@ -660,7 +697,7 @@ def myteam(request, emailaddress):
 
 	joinedteam = []
 	for i in Team.objects.all():
-		if me in i.Mem.all():
+		if me in i.mem.all():
 			print me, "at", i
 			if str(i.Owner) != emailaddress:
 				joinedteam.append(i)
@@ -710,26 +747,29 @@ def travel_details(request, user, city, joiner):
 	willgo = Willgo.objects.filter(EmailAddress=user, City=city)[0]
 	travel_user = User.objects.filter(Name = user)[0]
 	team = Team.objects.filter(City = city, Owner=travel_user.EmailAddress)[0]
-	submit_team = team.Mem.all()
-	print submit_team
+	submit_team = team.mem.all()
+
 	joined = []
-	judge_joined = User.objects.filter(EmailAddress=joiner)[0]
-	if judge_joined in submit_team:
-		joined.append('1')
+	judge_joined = User.objects.filter(EmailAddress=joiner)
+	if judge_joined:
+		if judge_joined[0] in submit_team:
+			joined.append('1')
+	else:
+		error.append('请先去完善个人信息，方便大家认识你')
 	if request.method == 'POST':
 		submit = True
 		
-		if len(team.Mem.all()) < 5:
+		if len(team.mem.all()) < 5:
 			join_user = User.objects.filter(EmailAddress=joiner)[0]
-			team.Mem.add(join_user)
+			team.mem.add(join_user)
 			joiner_team = Team.objects.filter(Owner=joiner, City=city)
-			joiner_willgo = Willgo.objects.filter(EmailAddress=judge_joined, City=city)
+			joiner_willgo = Willgo.objects.filter(EmailAddress=judge_joined[0], City=city)
 			if joiner_team:
 				joiner_team[0].delete()
 			if joiner_willgo:
 				joiner_willgo[0].delete()
 		return HttpResponseRedirect('/'+str(joiner)+'/'+'recommend')
-	return render(request, 'travel_details.html', {'joined':joined, 'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
+	return render(request, 'travel_details.html', {'Joiner':joiner, 'joined':joined, 'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
 
 
 def travel_delete(request, user, city, joiner):
@@ -739,7 +779,7 @@ def travel_delete(request, user, city, joiner):
 	willgo = Willgo.objects.filter(EmailAddress=user, City=city)[0]
 	travel_user = User.objects.filter(Name = user)[0]
 	team = Team.objects.filter(City = city, Owner=travel_user.EmailAddress)[0]
-	submit_team = team.Mem.all()
+	submit_team = team.mem.all()
 	print submit_team
 	judge_joined = User.objects.filter(EmailAddress=joiner)[0]
 	if request.method == 'POST':
@@ -760,7 +800,7 @@ def travel_leave(request, user, city, joiner):
 	willgo = Willgo.objects.filter(EmailAddress=user, City=city)[0]
 	travel_user = User.objects.filter(Name = user)[0]
 	team = Team.objects.filter(City = city, Owner=travel_user.EmailAddress)[0]
-	submit_team = team.Mem.all()
+	submit_team = team.mem.all()
 	#print submit_team
 
 	if request.method == 'POST':
@@ -769,31 +809,97 @@ def travel_leave(request, user, city, joiner):
 		for i in submit_team:
 			print i, judge_joined, "**"
 			if str(i) == str(judge_joined):
-				team.Mem.remove(i) 
+				team.mem.remove(i) 
 		#submit_team = temp
 		return HttpResponseRedirect('/'+str(joiner)+'/'+'myteam')
 	return render(request, 'travel_leave.html', {'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
 
-from PIL import Image
-def photos(request, emailaddress, place):
+	
+import httplib
+import urlparse
+import urllib
+from urllib2 import Request, urlopen, URLError, HTTPError
+
+# import urllib
+# from urllib2 import Request, urlopen, URLError, HTTPError
+# def test(url):
+	# if isinstance(url,unicode):
+		# url = url.encode("gbk")
+	# else:
+		# url = url.decode("utf-8").encode("gbk")
+	# print url, "^^^"
+	# req = Request(url,headers=const.headers)
+	# self.charset = const.default_charset
+	# try:	
+		# response = urlopen(req, timeout = 10)
+	# except Exception:
+		# pass
+	# print url
+	# statusCode =urllib.urlopen(url).getcode()
+	# print statusCode
+	# return statusCode
+# def httpexist(url）: 
+        # result = 0;
+        # url = raw_input("请输入需要测试的网址.");
+        # cut = input("请输入需要循环的次数."); 
+        # for i in range(0, cut):
+                # if (test(url) == True):
+                        # result +=1;
+        # print('Test ' + str(cut) +'times, succeed'+str(result) +'times')
+
+from os import environ
+def photos(request, emailaddress, number):
 	submit = []
-	count = '1'
+	count = '2'
+	place = Place.objects.filter(EmailAddress=emailaddress, Number=number)
+	place = place[0].Place
 	if request.method == 'POST':
 		submit = ['1']
-		cwd = os.getcwd() 
+		#cwd = os.getcwd()
 		#print(cwd)
 		try:
-			reqfile = request.FILES['picfile'] #picfile要和html里面一致
-			img = Image.open(reqfile)
-			img.thumbnail((500,500),Image.ANTIALIAS) #对图片进行等比缩放
-			
-			if os.path.exists(cwd + '/static/images/' + emailaddress + '/' + place):
-				while os.path.exists(cwd + '/static/images/' + emailaddress + '/' + place + '/' + count + '.png'):
+			img = request.FILES['picfile']
+			#img.name = 'hello'
+			#print img,type(img)
+			# img = Image.open(reqfile)
+			# img.thumbnail((500,500),Image.ANTIALIAS)
+			#x = cwd + '/static/images/' + emailaddress + '/' + place
+			#if test("http://triphelper-travel.stor.sinaapp.com/" + emailaddress + "_" + place + "_" + "1.png") == 200:
+			if httpExists("http://triphelper-travel.stor.sinaapp.com/" + emailaddress + "_" + number + "_" + "1.png"):
+				while httpExists("http://triphelper-travel.stor.sinaapp.com/" + emailaddress + "_" + number + "_" + count +".png"):
 					count = str(int(count) + 1)
-				img.save(cwd + '/static/images/' + emailaddress + '/' + place + '/' + count +'.png',"png") #保存图片
+				img.name = emailaddress + "_" + number + "_" + count + ".png"
+				online = environ.get("APP_NAME", "")
+				if online:
+					import sae.const  
+					access_key = sae.const.ACCESS_KEY  
+					secret_key = sae.const.SECRET_KEY  
+					appname = sae.const.APP_NAME  
+					domain_name = "travel"  #applied domain
+					import sae.storage
+					s = sae.storage.Client()
+					ob = sae.storage.Object(img.read())
+					url = s.put(domain_name, img.name, ob)
+				# img.save(cwd + '/static/images/' + emailaddress + '/' + place + '/' + count +'.png',"png") #保存图片
 			else:
-				os.makedirs(cwd + '/static/images/' + emailaddress +'/' + place)
-				img.save(cwd + '/static/images/' + emailaddress + '/' + place + '/' + count +'.png',"png")
+				#statuscode = test("http://triphelper-travel.stor.sinaapp.com/" + emailaddress + "_" + place + "_" + "1.png")
+				count = '1'
+				img.name = emailaddress + "_" + number + "_" + "1.png"
+				online = environ.get("APP_NAME", "")
+				if online:  
+					import sae.const
+					access_key = sae.const.ACCESS_KEY  
+					secret_key = sae.const.SECRET_KEY  
+					appname = sae.const.APP_NAME  
+					domain_name = "travel"  #刚申请的domain
+					import sae.storage
+					s = sae.storage.Client()
+					ob = sae.storage.Object(img.read())
+					url = s.put(domain_name, img.name, ob)
+					return render(request, 'index.html', {'Count':count, 'Submit':submit, 'Emailaddress':emailaddress, 'place':place}, context_instance = RequestContext(request))
+				# os.makedirs(cwd + '/static/images/' + emailaddress +'/' + place)
+				# os.chmod(cwd + '/static/images/' + emailaddress +'/' + place, stat.S_IRWXU|stat.S_IRWXG|stat.S_IRWXO)
+				# img.save(cwd + '/static/images/' + emailaddress + '/' + place + '/' + count +'.png',"png")
 		except Exception,e:
 			return HttpResponse("Error %s"%e)#异常，查看报错信息
 	return render(request, 'index.html', {'Count':count, 'Submit':submit, 'Emailaddress':emailaddress, 'place':place}, context_instance = RequestContext(request))

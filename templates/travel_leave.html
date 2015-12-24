@@ -1,53 +1,54 @@
-<html>
-<body bgcolor="f3f9f1">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<style type="text/css">
-h1 {letter-spacing: 10px}
-h1 {text-decoration: underline}
-h1 {color:#725e82}
-h1 {font-family:"SimHei"}
-h1 {text-indent: 5cm}
-h1.thick {font-weight: bold}
-h4 {color:#bacac6}
-h4 {text-indent: 5cm}
-h1.small {line-height: 5%}
-</style>
+<title>Leave?</title>
+<meta name="keywords" content="" />
+<meta name="Bryce Sunrise" content="" />
+<link href="/static/css/default.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
-
-<br />
-<h1 class="small", class="thick">确定离开？</h1>
-<h4>Are you sure to leave?</h4>
-
-<head>
-<style type="text/css">
-h3 {text-indent: 5cm}
-h3 {font-family:"KaiTi"}
-h3 {color:#177cb0}
-</style>
-</head>
-
-<h3><span>{{willgo.EmailAddress}} 发布的意向</h3>
-<h3><span>去 {{willgo.Province}} {{willgo.City}} 玩儿</h3>
-<h3><span>{{willgo.Date}} 出发</h3>
-<h3><span>玩 {{willgo.Time}} 天</h3>
-<h3><span>每人花费在 {{willgo.Low}} 至 {{willgo.High}} 元之间</h3>
-<h3><span class="highlight">目前队伍里有 
-{% for i in team %}
-<a href="/{{i}}/information">{{i}}</a>
-{% endfor %}
-</h3>
-<h3><span>
-</br>
-</br>
-<form action="" method="post">
-{% csrf_token %}
-
-<input type="submit" value="离开此队伍">
-
-</form>
-</br>
-</h3>
-<h3><span><a href="#" onclick="window.history.back(); return false;" class="button cancel-link">带我返回</a></h3>
+<body>
+<!-- start header -->
+<div id="header">
+  <div id="logo">
+    <h1><a href="#"><span>确定离开？</span> </a></h1>
+    <p></p>
+  </div>
+  <div id="menu-bg">
+  <div id="menu">
+    <ul id="main">
+    </ul>
+  </div>
+  </div>
+</div>
+<!-- end header -->
+<div id="wrapper">
+  <!-- start page -->
+  <div id="page">
+    <!-- start content -->
+    <div id="content">
+      <div class="post">
+		<div class="entry">
+          <p>{{willgo.EmailAddress}} 发布的意向</p>
+		<p>去 {{willgo.Province}} {{willgo.City}} 玩儿</p>
+		<p>{{willgo.Date}} 出发</p>
+		<p>玩 {{willgo.Time}} 天</p>
+		<p>每人花费在 {{willgo.Low}} 至 {{willgo.High}} 元之间</p>
+		<p>目前队伍里有 
+		{% for i in team %}
+		<a href="/{{i}}/information">{{i}}</a>
+		{% endfor %}
+		</p>
+		</br>
+		</br>
+		<form action="" method="post">
+		{% csrf_token %}
+		<input type="submit" value="离开此队伍">
+		</form>
+		</br>
+		</h3>
+		<h3><span><a href="#" onclick="window.history.back(); return false;" class="button cancel-link">带我返回</a></h3>
+        </div>
+      </div>
 </body>
 </html>

@@ -35,6 +35,7 @@ class Place(models.Model):
 	EmailAddress = models.ForeignKey(Account)
 	Place = models.CharField(max_length=30)
 	Comment = models.TextField()
+	PlaceNum = models.IntegerField()
 	#Image = models.ImageField()
 	def __unicode__(self):
 		return self.Place

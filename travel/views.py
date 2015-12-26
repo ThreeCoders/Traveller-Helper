@@ -740,7 +740,58 @@ def myteam(request, emailaddress):
 			x.save()
 	return render(request, 'myteam.html', {'user':current_user, 'joinedteam':submit_willgo, 'Emailaddress':emailaddress, 'Error': error, 'Emailaddress':emailaddress, 'Submit':submit}, context_instance = RequestContext(request))
 
+def travel_details(request, user, city, joiner):
+	error = []
+	submit = False
+	user = User.objects.filter(Name = user)[0]
+	willgo = Willgo.objects.filter(EmailAddress=user, City=city)[0]
+	travel_user = User.objects.filter(Name = user)[0]
+	team = Team.objects.filter(City = city, Owner=travel_user.EmailAddress)[0]
+	submit_team = team.mem.all()
 
+	joined = []
+	judge_joined = User.objects.filter(EmailAddress=joiner)
+	if judge_joined:
+		if judge_joined[0] in submit_team:
+			joined.append('1')
+	else:
+		error.append('请先去完善个人信息，方便大家认识你')
+	if request.method == 'POST':
+		submit = True
+		
+		if len(team.mem.all()) < 5:
+			join_user = User.objects.filter(EmailAddress=joiner)[0]
+			team.mem.add(join_user)
+			joiner_team = Team.objects.filter(Owner=joiner, City=city)
+			joiner_willgo = Willgo.objects.filter(EmailAddress=judge_joined[0], City=city)
+			if joiner_team:
+				joiner_team[0].delete()
+			if joiner_willgo:
+				joiner_willgo[0].delete()
+		return HttpResponseRedirect('/'+str(joiner)+'/'+'recommend')
+	return render(request, 'travel_details.html', {'Joiner':joiner, 'joined':joined, 'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
+
+
+def travel_delete(request, user, city, joiner):
+	error = []
+	submit = False
+	user = User.objects.filter(Name = user)[0]
+	willgo = Willgo.objects.filter(EmailAddress=user, City=city)[0]
+	travel_user = User.objects.filter(Name = user)[0]
+	team = Team.objects.filter(City = city, Owner=travel_user.EmailAddress)[0]
+	submit_team = team.mem.all()
+	print submit_team
+	judge_joined = User.objects.filter(EmailAddress=joiner)[0]
+	if request.method == 'POST':
+		submit = True
+		joiner_team = Team.objects.filter(Owner=joiner, City=city)[0]
+		joiner_willgo = Willgo.objects.filter(EmailAddress=judge_joined, City=city)[0]
+		if joiner_team:
+				joiner_team.delete()
+		if joiner_willgo:
+				joiner_willgo.delete()
+		return HttpResponseRedirect('/'+str(joiner)+'/'+'myteam')
+	return render(request, 'travel_delete.html', {'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
 	
 def travel_leave(request, user, city, joiner):
 	error = []

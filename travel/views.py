@@ -741,6 +741,29 @@ def myteam(request, emailaddress):
 	return render(request, 'myteam.html', {'user':current_user, 'joinedteam':submit_willgo, 'Emailaddress':emailaddress, 'Error': error, 'Emailaddress':emailaddress, 'Submit':submit}, context_instance = RequestContext(request))
 
 
+	
+def travel_leave(request, user, city, joiner):
+	error = []
+	submit = False
+	user = User.objects.filter(Name = user)[0]
+	willgo = Willgo.objects.filter(EmailAddress=user, City=city)[0]
+	travel_user = User.objects.filter(Name = user)[0]
+	team = Team.objects.filter(City = city, Owner=travel_user.EmailAddress)[0]
+	submit_team = team.mem.all()
+	#print submit_team
+
+	if request.method == 'POST':
+		judge_joined = User.objects.filter(EmailAddress=joiner)[0]
+		submit = True
+		for i in submit_team:
+			print i, judge_joined, "**"
+			if str(i) == str(judge_joined):
+				team.mem.remove(i) 
+		#submit_team = temp
+		return HttpResponseRedirect('/'+str(joiner)+'/'+'myteam')
+	return render(request, 'travel_leave.html', {'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
+
+	
 import httplib
 import urlparse
 import urllib

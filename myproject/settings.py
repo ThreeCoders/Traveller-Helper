@@ -1,3 +1,4 @@
+#coding:utf-8
 """
 Django settings for myproject project.
 
@@ -11,7 +12,32 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
+import os 
+import os.path   
+#import sae.const  
+from os import environ  
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+debug = not environ.get("APP_NAME", "")   
+if debug:
+    MYSQL_DB = 'myproject'      
+    MYSQL_USER = 'root'   
+    MYSQL_PASS = '123456'   
+    MYSQL_HOST_M = '127.0.0.1'   
+    MYSQL_HOST_S = '127.0.0.1'   
+    MYSQL_PORT = '3306'   
+else:
+    import sae.const   
+    MYSQL_DB = sae.const.MYSQL_DB   
+    MYSQL_USER = sae.const.MYSQL_USER   
+    MYSQL_PASS = sae.const.MYSQL_PASS   
+    MYSQL_HOST_M = sae.const.MYSQL_HOST   
+    MYSQL_HOST_S = sae.const.MYSQL_HOST_S   
+    MYSQL_PORT = sae.const.MYSQL_PORT  
+
+
+
+
+
 CSS_DIR = '../static/css'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_URL = '/static/'
@@ -59,7 +85,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['C:/Users/Paul_Yu/myproject/templates'],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,8 +106,12 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': MYSQL_DB,
+        'USER':MYSQL_USER,
+        'PASSWORD':MYSQL_PASS,
+        'HOST': MYSQL_HOST_M,
+        'PORT': MYSQL_PORT,
     }
 }
 

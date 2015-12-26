@@ -18,8 +18,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from travel.views import login, newaccount, mainpage, recommend, foot, fillinformation, security, commentview, information, willgo, myteam, travel_details, travel_leave, travel_delete, photos, allcomments
+from travel.views import login, newaccount, mainpage, recommend, foot, fillinformation, security, commentview, information, willgo, myteam, travel_details, travel_leave, travel_delete, photos, allcomments, aboutme
 urlpatterns = [
+	url(r'^aboutme/$', aboutme),
 	url(r'^site_media/(?P<path>.*)','django.views.static.serve',{'document_root':'../static/css'}),
 	url(r'^([^/]+)/([^/]+)/photos/$', photos),
 	url(r'^([^/]+)/([^/]+)/([^/]+)/details/$', travel_details),

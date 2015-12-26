@@ -35,8 +35,7 @@ class Place(models.Model):
 	EmailAddress = models.ForeignKey(Account)
 	Place = models.CharField(max_length=30)
 	Comment = models.TextField()
-	PlaceNum = models.IntegerField()
-	#Image = models.ImageField()
+	Number = models.CharField(max_length=20)
 	def __unicode__(self):
 		return self.Place
 
@@ -45,7 +44,7 @@ class Team(models.Model):
 	Province = models.CharField(max_length=30)
 	City = models.CharField(max_length=30)
 	Date = models.DateField()
-	Mem = models.ManyToManyField(User)
+	mem = models.ManyToManyField(User)
 	def __unicode__(self):
 		return str(self.Owner)
 

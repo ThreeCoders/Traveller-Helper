@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('Order', models.IntegerField()),
                 ('Place', models.CharField(max_length=30)),
+                ('Number', models.CharField(max_length=20)),
                 ('Comment', models.TextField()),
                 ('EmailAddress', models.ForeignKey(to='travel.Account')),
             ],
@@ -69,7 +70,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='team',
-            name='Mem',
+            name='mem',
             field=models.ManyToManyField(to='travel.User'),
         ),
         migrations.AddField(

@@ -792,6 +792,10 @@ def travel_delete(request, user, city, joiner):
 				joiner_willgo.delete()
 		return HttpResponseRedirect('/'+str(joiner)+'/'+'myteam')
 	return render(request, 'travel_delete.html', {'team':submit_team, 'willgo':willgo, 'Error': error, 'Submit':submit}, context_instance = RequestContext(request))
+<<<<<<< HEAD
+=======
+	
+>>>>>>> refs/remotes/origin/master
 	
 def travel_leave(request, user, city, joiner):
 	error = []
